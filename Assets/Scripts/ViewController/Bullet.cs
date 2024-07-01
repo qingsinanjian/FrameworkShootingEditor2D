@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using FrameworkDesign;
 using UnityEngine;
 
 namespace ShootingEditor2D
 {
-    public class Bullet : MonoBehaviour
+    public class Bullet : MonoBehaviour, IController
     {
         private Rigidbody2D mRigidbody2D;
 
@@ -22,8 +21,14 @@ namespace ShootingEditor2D
         {
             if (collision.gameObject.CompareTag("Enemy"))
             {
+                this.SendCommand<KillEnemyCommand>();
                 Destroy(collision.gameObject);
             }
+        }
+
+        public IArchitecture GetArchitecture()
+        {
+            return ShootingEditor2D.Interface;
         }
     }
 }
