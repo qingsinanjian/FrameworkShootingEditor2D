@@ -17,5 +17,13 @@ namespace ShootingEditor2D
         {
             mRigidbody2D.velocity = Vector2.right * 10;
         }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                Destroy(collision.gameObject);
+            }
+        }
     }
 }
