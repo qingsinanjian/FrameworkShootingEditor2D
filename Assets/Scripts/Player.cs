@@ -8,6 +8,7 @@ namespace ShootingEditor2D
     {
         private Rigidbody2D mRigidbody2D;
         private Trigger2DCheck mTrigger2DCheck;
+        private Gun mGun;
 
         private bool mJumpPressed;
 
@@ -15,6 +16,7 @@ namespace ShootingEditor2D
         {
             mRigidbody2D = GetComponent<Rigidbody2D>();
             mTrigger2DCheck = transform.Find("GroundCheck").GetComponent<Trigger2DCheck>();
+            mGun = transform.Find("Gun").GetComponent<Gun>();
         }
 
         private void Update()
@@ -22,6 +24,11 @@ namespace ShootingEditor2D
             if (Input.GetKeyDown(KeyCode.K))
             {
                 mJumpPressed = true;
+            }
+
+            if(Input.GetKeyDown(KeyCode.J))
+            {
+                mGun.Shoot();
             }
         }
 
