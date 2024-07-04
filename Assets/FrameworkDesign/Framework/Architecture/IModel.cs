@@ -22,6 +22,6 @@ namespace FrameworkDesign
             OnInit();
         }
 
-        protected abstract void OnInit();
+        public abstract void OnInit();
     }
 }

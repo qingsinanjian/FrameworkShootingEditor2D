@@ -9,9 +9,9 @@ namespace ShootingEditor2D
 
     public class PlayerModel : AbstractModel, IPlayerModel
     {
-        protected override void OnInit()
+        public override void OnInit()
         {
-
+            throw new System.NotImplementedException();
         }
 
         public BindableProperty<int> HP { get; } = new BindableProperty<int>
