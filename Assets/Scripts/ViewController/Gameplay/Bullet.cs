@@ -10,6 +10,7 @@ namespace ShootingEditor2D
         private void Awake()
         {
             mRigidbody2D = GetComponent<Rigidbody2D>();
+            Destroy(gameObject, 5);
         }
 
         private void Start()
@@ -23,6 +24,7 @@ namespace ShootingEditor2D
             {
                 this.SendCommand<KillEnemyCommand>();
                 Destroy(collision.gameObject);
+                Destroy(gameObject);
             }
         }
 
