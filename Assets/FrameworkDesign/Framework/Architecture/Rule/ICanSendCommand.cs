@@ -11,9 +11,9 @@
             self.GetArchitecture().SendCommand<T>();
         }
 
-        public static void SendCommand<T>(this ICanSendCommand self, T command) where T : ICommand, new()
+        public static void SendCommand<T>(this ICanSendCommand self, T command) where T : ICommand
         {
-            self.GetArchitecture().SendCommand<T>(command);
+            self.GetArchitecture().SendCommand(command);
         }
     }
 }

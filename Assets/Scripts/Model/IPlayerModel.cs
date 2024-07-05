@@ -11,7 +11,7 @@ namespace ShootingEditor2D
     {
         public override void OnInit()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public BindableProperty<int> HP { get; } = new BindableProperty<int>
