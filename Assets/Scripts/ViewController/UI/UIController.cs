@@ -8,11 +8,13 @@ namespace ShootingEditor2D
     {
         private IStatSystem mStatSystem;
         private IPlayerModel mPlayerModel;
+        private IGunSystem mGunSystem;
 
         private void Awake()
         {
             mPlayerModel = this.GetModel<IPlayerModel>();
             mStatSystem = this.GetSystem<IStatSystem>();
+            mGunSystem = this.GetSystem<IGunSystem>();
         }
 
         /// <summary>
@@ -26,7 +28,15 @@ namespace ShootingEditor2D
         private void OnGUI()
         {
             GUI.Label(new Rect(10, 10, 300, 100), $"生命：{mPlayerModel.HP.Value}/3", mLableStyle.Value);
+            GUI.Label(new Rect(10, 60, 300, 100), $"子弹：{mGunSystem.CurrentGun.BulletCount.Value}", mLableStyle.Value);
             GUI.Label(new Rect(Screen.width - 10 - 300, 10, 300, 100), $"击杀次数：{mStatSystem.KillCount.Value}", mLableStyle.Value);
+        }
+
+        private void OnDestroy()
+        {
+            mPlayerModel = null;
+            mStatSystem = null;
+            mGunSystem = null;
         }
 
         public IArchitecture GetArchitecture()
