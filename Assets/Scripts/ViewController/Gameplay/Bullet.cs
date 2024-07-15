@@ -15,7 +15,8 @@ namespace ShootingEditor2D
 
         private void Start()
         {
-            mRigidbody2D.velocity = Vector2.right * 10;
+            var isRight = Mathf.Sign(transform.lossyScale.x);
+            mRigidbody2D.velocity = Vector2.right * 10 * isRight;
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

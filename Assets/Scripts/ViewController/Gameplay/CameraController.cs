@@ -6,7 +6,15 @@ namespace ShootingEditor2D
     {
         private Transform mPlayerTrans;
 
-        private void Update()
+        private Vector3 mTargetPos;
+
+        //±ß½çµÄ·¶Î§
+        private float xMin = -5;
+        private float xMax = 5;
+        private float yMin = -5;
+        private float yMax = 5;
+
+        private void LateUpdate()
         {
             if (!mPlayerTrans)
             {
@@ -25,10 +33,15 @@ namespace ShootingEditor2D
             var cameraPos = transform.position;
             var isRight = Mathf.Sign(mPlayerTrans.localScale.x);
             var playerPos = mPlayerTrans.position;
-            cameraPos.x = playerPos.x + 3 * isRight;
-            cameraPos.y = playerPos.y + 2;
+            mTargetPos.x = playerPos.x + 3 * isRight;
+            mTargetPos.y = playerPos.y + 2;
+            mTargetPos.z = -10;
 
-            transform.position = cameraPos;
+            var smoothSpeed = 5;
+            var position = transform.position;
+            position = Vector3.Lerp(position, mTargetPos, smoothSpeed * Time.deltaTime);
+
+            transform.position = new Vector3(Mathf.Clamp(position.x, xMin, xMax), Mathf.Clamp(position.y, yMin, yMax), position.z);
         }
     }
 }
