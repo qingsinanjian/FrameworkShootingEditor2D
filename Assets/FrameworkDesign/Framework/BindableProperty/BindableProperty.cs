@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FrameworkDesign
 {
-    public class BindableProperty<T> where T : IEquatable<T>
+    public class BindableProperty<T>
     {
         private T mValue = default(T);
         public T Value
@@ -14,7 +14,7 @@ namespace FrameworkDesign
             }
             set
             {
-                if(!mValue.Equals(value))
+                if(!value.Equals(mValue))
                 {
                     mValue = value;
                     mOnValueChanged?.Invoke(value);
@@ -40,7 +40,7 @@ namespace FrameworkDesign
         }
     }
 
-    public class BindablePropertyUnRegister<T> : IUnRegister where T : IEquatable<T>
+    public class BindablePropertyUnRegister<T> : IUnRegister
     {
         public BindableProperty<T> BindableProperty { get; set; }
 

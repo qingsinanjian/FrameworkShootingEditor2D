@@ -11,9 +11,21 @@ namespace ShootingEditor2D
     {
         public GunInfo CurrentGun { get; } = new GunInfo()
         {
-            BulletCount = new BindableProperty<int>()
+            BulletCountInGun = new BindableProperty<int>()
             {
                 Value = 3
+            },
+            BulletCountOutGun = new BindableProperty<int>()
+            {
+                Value = 1
+            },
+            Name = new BindableProperty<string>()
+            {
+                Value = "手枪"
+            },
+            GunState = new BindableProperty<GunState>()
+            {
+                Value = GunState.Idle
             }
         };
 
