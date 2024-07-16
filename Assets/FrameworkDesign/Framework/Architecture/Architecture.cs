@@ -14,6 +14,7 @@ namespace FrameworkDesign
         T GetUtility<T>() where T : class, IUtility;
         void SendCommand<T>() where T : ICommand, new();
         void SendCommand<T>(T command) where T : ICommand;
+        TResult SendQuery<TResult>(IQuery<TResult> query);
         void SendEvent<T>() where T : new();
         void SendEvent<T>(T e);
         IUnRegister RegisterEvent<T>(Action<T> onEvent);
@@ -160,6 +161,12 @@ namespace FrameworkDesign
         public void UnRegisterEvent<T>(Action<T> onEvent)
         {
             mTypeEventSystem?.UnRegister<T>(onEvent);
+        }
+
+        public TResult SendQuery<TResult>(IQuery<TResult> query)
+        {
+            query.SetArchitecture(this);
+            return query.Do();
         }
     }
 }

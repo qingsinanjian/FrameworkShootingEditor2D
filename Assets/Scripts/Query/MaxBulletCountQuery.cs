@@ -3,7 +3,7 @@ using UnityEditor.U2D.Path.GUIFramework;
 
 namespace ShootingEditor2D
 {
-    public class MaxBulletCountQuery : ICanGetModel
+    public class MaxBulletCountQuery : AbstractQuery<int>
     {
         private readonly string mGunName;
 
@@ -12,16 +12,11 @@ namespace ShootingEditor2D
             mGunName = gunName;
         }
 
-        public int Do()
+        protected override int OnDo()
         {
             var gunConfigModel = this.GetModel<IGunConfigModel>();
             var gunConfigItem = gunConfigModel.GetGunConfigItemByName(mGunName);
             return gunConfigItem.BulletMaxCount;
-        }
-
-        public IArchitecture GetArchitecture()
-        {
-            return ShootingEditor2D.Interface;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ShootingEditor2D
 {
-    public interface IGunConfigModel : IModel
+    public interface IGunConfigModel : IBelongToArchitecture, IModel
     {
         GunConfigItem GetGunConfigItemByName(string gunName);
     }
