@@ -10,6 +10,10 @@ namespace ShootingEditor2D
             var gunSystem = this.GetSystem<IGunSystem>().CurrentGun;
             gunSystem.BulletCountInGun.Value--;
             gunSystem.GunState.Value = GunState.Shooting;
+            this.GetSystem<ITimeSystem>().AddDelayTask(0.33f, () =>
+            {
+                gunSystem.GunState.Value = GunState.Idle;
+            });
         }
     }
 }
