@@ -8,6 +8,7 @@ namespace ShootingEditor2D
     {
         GunInfo CurrentGun { get; }
         void PickGun(string name, int bulletCountInGun, int bulletCountOutGun);
+        void ShiftGun();
     }
 
     public class OnCurrentGunChange
@@ -60,37 +61,48 @@ namespace ShootingEditor2D
             }
             else
             {
-                var currentGunInfo = new GunInfo
-                {
-                    Name = new BindableProperty<string>()
-                    {
-                        Value = CurrentGun.Name.Value
-                    },
-                    BulletCountInGun = new BindableProperty<int>()
-                    {
-                        Value = CurrentGun.BulletCountInGun.Value
-                    },
-                    BulletCountOutGun = new BindableProperty<int>()
-                    {
-                        Value = CurrentGun.BulletCountOutGun.Value
-                    },
-                    GunState = new BindableProperty<GunState>()
-                    {
-                        Value = CurrentGun.GunState.Value
-                    }
-                };
-
-                mGunInfos.Enqueue(currentGunInfo);
-
-                CurrentGun.Name.Value = name;
-                CurrentGun.BulletCountInGun.Value = bulletCountInGun;
-                CurrentGun.BulletCountOutGun.Value = bulletCountOutGun;
-
-                this.SendEvent(new OnCurrentGunChange()
-                {
-                    Name = name
-                });
+                EnqueueCurrentGun(name, bulletCountInGun, bulletCountOutGun);
             }            
+        }
+
+        public void ShiftGun()
+        {
+            var previousGun = mGunInfos.Dequeue();
+            EnqueueCurrentGun(previousGun.Name.Value, previousGun.BulletCountInGun.Value, previousGun.BulletCountOutGun.Value);
+        }
+
+        private void EnqueueCurrentGun(string nextGunName, int nextBulletCountInGun, int nextBulletCountOutGun)
+        {
+            var currentGunInfo = new GunInfo
+            {
+                Name = new BindableProperty<string>()
+                {
+                    Value = CurrentGun.Name.Value
+                },
+                BulletCountInGun = new BindableProperty<int>()
+                {
+                    Value = CurrentGun.BulletCountInGun.Value
+                },
+                BulletCountOutGun = new BindableProperty<int>()
+                {
+                    Value = CurrentGun.BulletCountOutGun.Value
+                },
+                GunState = new BindableProperty<GunState>()
+                {
+                    Value = CurrentGun.GunState.Value
+                }
+            };
+
+            mGunInfos.Enqueue(currentGunInfo);
+
+            CurrentGun.Name.Value = nextGunName;
+            CurrentGun.BulletCountInGun.Value = nextBulletCountInGun;
+            CurrentGun.BulletCountOutGun.Value = nextBulletCountOutGun;
+
+            this.SendEvent(new OnCurrentGunChange()
+            {
+                Name = nextGunName
+            });
         }
     }
 }

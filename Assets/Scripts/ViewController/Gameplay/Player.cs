@@ -34,6 +34,11 @@ namespace ShootingEditor2D
             {
                 mGun.Reload();
             }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                this.SendCommand(new ShiftGunCommand());
+            }
         }
 
         private void FixedUpdate()
