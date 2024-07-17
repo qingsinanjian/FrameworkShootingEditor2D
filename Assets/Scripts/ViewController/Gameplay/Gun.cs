@@ -1,4 +1,5 @@
 ﻿using FrameworkDesign;
+using System;
 using UnityEngine;
 
 namespace ShootingEditor2D
@@ -7,11 +8,13 @@ namespace ShootingEditor2D
     {
         private Bullet mBullet;
         private GunInfo mGunInfo;
+        private int mMaxBulletCount;
 
         private void Awake()
         {
             mBullet = transform.Find("Bullet").GetComponent<Bullet>();
             mGunInfo = this.GetSystem<IGunSystem>().CurrentGun;
+            mMaxBulletCount = this.SendQuery(new MaxBulletCountQuery(mGunInfo.Name.Value));
         }
 
         public void Shoot()
@@ -34,6 +37,17 @@ namespace ShootingEditor2D
         public IArchitecture GetArchitecture()
         {
             return ShootingEditor2D.Interface;
+        }
+
+        public void Reload()
+        {
+            if(mGunInfo.GunState.Value == GunState.Idle &&
+                mGunInfo.BulletCountInGun.Value != mMaxBulletCount &&
+                mGunInfo.BulletCountOutGun.Value > 0
+            )
+            {
+                this.SendCommand<ReloadCommand>();
+            }
         }
     }
 }

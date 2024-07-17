@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ShootingEditor2D
@@ -30,6 +28,11 @@ namespace ShootingEditor2D
             {
                 mGun.Shoot();
             }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                mGun.Reload();
+            }
         }
 
         private void FixedUpdate()
@@ -55,5 +58,6 @@ namespace ShootingEditor2D
 
             mJumpPressed = false;
         }
+
     }
 }
