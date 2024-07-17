@@ -7,6 +7,7 @@ namespace ShootingEditor2D
     public interface IGunSystem : ISystem
     {
         GunInfo CurrentGun { get; }
+        Queue<GunInfo> GunInfos { get; }
         void PickGun(string name, int bulletCountInGun, int bulletCountOutGun);
         void ShiftGun();
     }
@@ -38,6 +39,8 @@ namespace ShootingEditor2D
             }
         };
 
+        public Queue<GunInfo> GunInfos => mGunInfos;
+
         public override void OnInit()
         {
             
@@ -67,8 +70,11 @@ namespace ShootingEditor2D
 
         public void ShiftGun()
         {
-            var previousGun = mGunInfos.Dequeue();
-            EnqueueCurrentGun(previousGun.Name.Value, previousGun.BulletCountInGun.Value, previousGun.BulletCountOutGun.Value);
+            if(mGunInfos.Count > 0)
+            {
+                var previousGun = mGunInfos.Dequeue();
+                EnqueueCurrentGun(previousGun.Name.Value, previousGun.BulletCountInGun.Value, previousGun.BulletCountOutGun.Value);
+            }            
         }
 
         private void EnqueueCurrentGun(string nextGunName, int nextBulletCountInGun, int nextBulletCountOutGun)
