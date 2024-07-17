@@ -19,6 +19,10 @@ namespace ShootingEditor2D
             mGunSystem = this.GetSystem<IGunSystem>();
             //≤È—Ø
             mMaxBulletCount = this.SendQuery(new MaxBulletCountQuery(mGunSystem.CurrentGun.Name.Value));
+            this.RegisterEvent<OnCurrentGunChange>(e =>
+            {
+                mMaxBulletCount = this.SendQuery(new MaxBulletCountQuery(mGunSystem.CurrentGun.Name.Value));
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
         /// <summary>

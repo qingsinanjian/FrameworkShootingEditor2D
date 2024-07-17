@@ -1,10 +1,18 @@
 ﻿using FrameworkDesign;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShootingEditor2D
 {
     public interface IGunSystem : ISystem
     {
         GunInfo CurrentGun { get; }
+        void PickGun(string name, int bulletCountInGun, int bulletCountOutGun);
+    }
+
+    public class OnCurrentGunChange
+    {
+        public string Name { get; set; }
     }
 
     public class GunSystem : AbstractSystem, IGunSystem
@@ -32,6 +40,57 @@ namespace ShootingEditor2D
         public override void OnInit()
         {
             
+        }
+
+        private Queue<GunInfo> mGunInfos = new Queue<GunInfo>();
+
+        public void PickGun(string name, int bulletCountInGun, int bulletCountOutGun)
+        {
+            //如果是当前枪
+            if(CurrentGun.Name.Value == name)
+            {
+                CurrentGun.BulletCountInGun.Value += bulletCountInGun;
+                CurrentGun.BulletCountOutGun.Value += bulletCountOutGun;
+            }
+            else if(mGunInfos.Any(gunInfo => gunInfo.Name.Value == name))
+            {
+                var gunInfo = mGunInfos.First(gunInfo => gunInfo.Name.Value == name);
+                gunInfo.BulletCountInGun.Value += bulletCountInGun;
+                gunInfo.BulletCountOutGun.Value += bulletCountOutGun;
+            }
+            else
+            {
+                var currentGunInfo = new GunInfo
+                {
+                    Name = new BindableProperty<string>()
+                    {
+                        Value = CurrentGun.Name.Value
+                    },
+                    BulletCountInGun = new BindableProperty<int>()
+                    {
+                        Value = CurrentGun.BulletCountInGun.Value
+                    },
+                    BulletCountOutGun = new BindableProperty<int>()
+                    {
+                        Value = CurrentGun.BulletCountOutGun.Value
+                    },
+                    GunState = new BindableProperty<GunState>()
+                    {
+                        Value = CurrentGun.GunState.Value
+                    }
+                };
+
+                mGunInfos.Enqueue(currentGunInfo);
+
+                CurrentGun.Name.Value = name;
+                CurrentGun.BulletCountInGun.Value = bulletCountInGun;
+                CurrentGun.BulletCountOutGun.Value = bulletCountOutGun;
+
+                this.SendEvent(new OnCurrentGunChange()
+                {
+                    Name = name
+                });
+            }            
         }
     }
 }

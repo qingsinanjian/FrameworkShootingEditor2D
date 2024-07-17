@@ -1,8 +1,9 @@
+using FrameworkDesign;
 using UnityEngine;
 
 namespace ShootingEditor2D
 {
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, IController
     {
         private Rigidbody2D mRigidbody2D;
         private Trigger2DCheck mTrigger2DCheck;
@@ -59,5 +60,9 @@ namespace ShootingEditor2D
             mJumpPressed = false;
         }
 
+        public IArchitecture GetArchitecture()
+        {
+            return ShootingEditor2D.Interface;
+        }
     }
 }
