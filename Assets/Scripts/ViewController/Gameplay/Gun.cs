@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ShootingEditor2D
 {
-    public class Gun : MonoBehaviour, IController
+    public class Gun : ShootingEditor2DController
     {
         private Bullet mBullet;
         private GunInfo mGunInfo;
@@ -32,11 +32,6 @@ namespace ShootingEditor2D
         private void OnDestroy()
         {
             mGunInfo = null;
-        }
-
-        public IArchitecture GetArchitecture()
-        {
-            return ShootingEditor2D.Interface;
         }
 
         public void Reload()

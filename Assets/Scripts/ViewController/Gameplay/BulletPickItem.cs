@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShootingEditor2D
 {
-    public class BulletPickItem : MonoBehaviour, IController
+    public class BulletPickItem : ShootingEditor2DController
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -12,11 +12,6 @@ namespace ShootingEditor2D
                 this.SendCommand(new AddBulletCommand());
                 Destroy(this.gameObject);
             }
-        }
-
-        public IArchitecture GetArchitecture()
-        {
-            return ShootingEditor2D.Interface;
         }
     }
 }

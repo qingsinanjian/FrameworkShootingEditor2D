@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ShootingEditor2D
 {
-    public class GunPickItem : MonoBehaviour, IController
+    public class GunPickItem : ShootingEditor2DController
     {
         public string Name;
         public int BulletCountInGun;
@@ -18,11 +18,6 @@ namespace ShootingEditor2D
                 this.SendCommand(new PickGunCommand(Name, BulletCountInGun, BulletCountOutGun));
                 Destroy(this.gameObject);
             }
-        }
-
-        public IArchitecture GetArchitecture()
-        {
-            return ShootingEditor2D.Interface;
         }
     }
 }

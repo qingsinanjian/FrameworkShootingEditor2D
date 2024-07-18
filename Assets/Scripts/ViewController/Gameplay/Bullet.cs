@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShootingEditor2D
 {
-    public class Bullet : MonoBehaviour, IController
+    public class Bullet : ShootingEditor2DController
     {
         private Rigidbody2D mRigidbody2D;
 
@@ -27,11 +27,6 @@ namespace ShootingEditor2D
                 Destroy(collision.gameObject);
                 Destroy(gameObject);
             }
-        }
-
-        public IArchitecture GetArchitecture()
-        {
-            return ShootingEditor2D.Interface;
         }
     }
 }

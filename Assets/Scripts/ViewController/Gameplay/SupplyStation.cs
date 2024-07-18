@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShootingEditor2D
 {
-    public class SupplyStation : MonoBehaviour, IController
+    public class SupplyStation : ShootingEditor2DController
     {
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -11,11 +11,6 @@ namespace ShootingEditor2D
             {
                 this.SendCommand<FullBulletCommand>();
             }
-        }
-
-        public IArchitecture GetArchitecture()
-        {
-            return ShootingEditor2D.Interface;
         }
     }
 }
