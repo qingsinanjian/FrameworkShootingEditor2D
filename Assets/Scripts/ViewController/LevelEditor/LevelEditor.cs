@@ -44,9 +44,6 @@ namespace ShootingEditor2D
 
         public SpriteRenderer EmptyHighlight;
 
-        private int mCurrentHighlightPosX;
-        private int mCurrentHighlightPosY;
-
         private bool mCanDraw;
         private GameObject mCurrentObjectMouseOn;
 
@@ -67,8 +64,8 @@ namespace ShootingEditor2D
                 EmptyHighlight.gameObject.SetActive(false);
             }
 
-            if(Math.Abs(mCurrentHighlightPosX - mouseWorldPos.x) < 0.1f && 
-               Math.Abs(mCurrentHighlightPosY - mouseWorldPos.y) < 0.1f)
+            if(Math.Abs(EmptyHighlight.transform.position.x - mouseWorldPos.x) < 0.1f && 
+               Math.Abs(EmptyHighlight.transform.position.y - mouseWorldPos.y) < 0.1f)
             {
 
             }
@@ -107,7 +104,7 @@ namespace ShootingEditor2D
                 }
             }
 
-            if (Input.GetMouseButtonDown(0) && GUIUtility.hotControl == 0)
+            if ((Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)) && GUIUtility.hotControl == 0)
             {
                 if (mCanDraw && mCurrentOperateMode == OperateMode.Draw)
                 {
@@ -115,10 +112,12 @@ namespace ShootingEditor2D
                     var groundGameObj = Instantiate(groundPrefab, this.transform);
                     groundGameObj.transform.position = mouseWorldPos;
                     groundGameObj.name = "Ground";
+                    mCanDraw = false;
                 }
                 else if(mCurrentObjectMouseOn && mCurrentOperateMode == OperateMode.Erase)
                 {
                     Destroy(mCurrentObjectMouseOn);
+                    mCurrentObjectMouseOn = null;
                 }
             }
         }
