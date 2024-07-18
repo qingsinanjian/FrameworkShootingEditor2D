@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Xml;
 using UnityEngine;
 
 namespace ShootingEditor2D
@@ -75,6 +79,51 @@ namespace ShootingEditor2D
                     mCurrentBrushType = BrushType.Player;
                 }
             }
+
+            var saveButtonRect = new Rect(Screen.width - 110, Screen.height - 60, 100, 50);
+            if(GUI.Button(saveButtonRect, "保存", mRightButtonStyle.Value))
+            {
+                Debug.Log("保存");
+                var infos = new List<LevelItemInfo>(transform.childCount);
+                foreach (Transform child in transform)
+                {
+                    infos.Add(new LevelItemInfo()
+                    {
+                        Name = child.name,
+                        X = child.position.x,
+                        Y = child.position.y,
+                    });
+                }
+
+                var document = new XmlDocument();
+                var declaration = document.CreateXmlDeclaration("1.0", "UTF-8", "");
+                document.AppendChild(declaration);
+
+                var level = document.CreateElement("Level");
+                document.AppendChild(level);
+                foreach (var levelItemInfo in infos)
+                {
+                    var levelItem = document.CreateElement("LevelItem");
+                    levelItem.SetAttribute("name", levelItemInfo.Name);
+                    levelItem.SetAttribute("x", levelItemInfo.X.ToString());
+                    levelItem.SetAttribute("y", levelItemInfo.Y.ToString());
+                    level.AppendChild(levelItem);
+                }
+
+                var stringBuilder = new StringBuilder();
+                var stringWriter = new StringWriter(stringBuilder);
+                var xmlWriter = new XmlTextWriter(stringWriter);
+                xmlWriter.Formatting = Formatting.Indented;//缩进格式
+                document.WriteTo(xmlWriter);
+                Debug.Log(stringBuilder.ToString());
+            }
+        }
+
+        class LevelItemInfo
+        {
+            public string Name;
+            public float X;
+            public float Y;
         }
 
         public SpriteRenderer EmptyHighlight;
