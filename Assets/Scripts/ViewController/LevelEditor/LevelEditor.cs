@@ -13,6 +13,14 @@ namespace ShootingEditor2D
 
         private OperateMode mCurrentOperateMode;
 
+        private enum BrushType
+        {
+            Ground,
+            Player
+        }
+
+        private BrushType mCurrentBrushType = BrushType.Ground;
+
         private Lazy<GUIStyle> mModeLableStyle = new Lazy<GUIStyle>(() => new GUIStyle(GUI.skin.label)
         {
             fontSize = 30,
@@ -25,10 +33,23 @@ namespace ShootingEditor2D
             alignment = TextAnchor.MiddleCenter,
         });
 
+        private Lazy<GUIStyle> mRightButtonStyle = new Lazy<GUIStyle>(() => new GUIStyle(GUI.skin.button)
+        {
+            fontSize = 25,
+            alignment = TextAnchor.MiddleCenter
+        });
+
         private void OnGUI()
         {
             var modeLableRect = RectHelper.RectForAnchorCenter(Screen.width * 0.5f, 35, 300, 100);
-            GUI.Label(modeLableRect, mCurrentOperateMode.ToString(), mModeLableStyle.Value);
+            if(mCurrentOperateMode == OperateMode.Draw)
+            {
+                GUI.Label(modeLableRect, mCurrentOperateMode + ":" + mCurrentBrushType, mModeLableStyle.Value);
+            }
+            else
+            {
+                GUI.Label(modeLableRect, mCurrentOperateMode.ToString(), mModeLableStyle.Value);
+            }
 
             var drawButtonRect = new Rect(10, 10, 150, 50);
             if(GUI.Button(drawButtonRect, "»æÖÆ", mButtonStyle.Value))
@@ -39,6 +60,20 @@ namespace ShootingEditor2D
             if (GUI.Button(eraseButtonRect, "ÏðÆ¤", mButtonStyle.Value))
             {
                 mCurrentOperateMode = OperateMode.Erase;
+            }
+
+            if (mCurrentOperateMode == OperateMode.Draw)
+            {
+                var groundButtonRect = new Rect(Screen.width - 110, 10, 100, 50);
+                if (GUI.Button(groundButtonRect, "µØ¿é", mRightButtonStyle.Value))
+                {
+                    mCurrentBrushType = BrushType.Ground;
+                }
+                var playerButtonRect = new Rect(Screen.width - 110, 70, 100, 50);
+                if (GUI.Button(playerButtonRect, "Ö÷½Ç", mRightButtonStyle.Value))
+                {
+                    mCurrentBrushType = BrushType.Player;
+                }
             }
         }
 
@@ -108,11 +143,23 @@ namespace ShootingEditor2D
             {
                 if (mCanDraw && mCurrentOperateMode == OperateMode.Draw)
                 {
-                    var groundPrefab = Resources.Load<GameObject>("Ground");
-                    var groundGameObj = Instantiate(groundPrefab, this.transform);
-                    groundGameObj.transform.position = mouseWorldPos;
-                    groundGameObj.name = "Ground";
-                    mCanDraw = false;
+                    if (mCurrentBrushType == BrushType.Ground)
+                    {
+                        var groundPrefab = Resources.Load<GameObject>("Ground");
+                        var groundGameObj = Instantiate(groundPrefab, this.transform);
+                        groundGameObj.transform.position = mouseWorldPos;
+                        groundGameObj.name = "Ground";
+                        mCanDraw = false;
+                    }
+                    else if(mCurrentBrushType == BrushType.Player)
+                    {
+                        var groundPrefab = Resources.Load<GameObject>("Ground");
+                        var groundGameObj = Instantiate(groundPrefab, this.transform);
+                        groundGameObj.transform.position = mouseWorldPos;
+                        groundGameObj.name = "Player";
+                        groundGameObj.GetComponent<SpriteRenderer>().color = Color.cyan;
+                        mCanDraw = false;
+                    }
                 }
                 else if(mCurrentObjectMouseOn && mCurrentOperateMode == OperateMode.Erase)
                 {
