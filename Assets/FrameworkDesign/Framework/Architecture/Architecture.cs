@@ -1,6 +1,8 @@
+using QFramework;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace FrameworkDesign
 {
@@ -80,24 +82,24 @@ namespace FrameworkDesign
         
         private IOCContainer mContainer = new IOCContainer();
 
-        public void RegisterSystem<T>(T instance) where T : ISystem
+        public void RegisterSystem<TSystem>(TSystem system) where TSystem : ISystem
         {
-            instance.SetArchitecture(this);
-            mContainer.Register<T>(instance);
+            system.SetArchitecture(this);
+            mContainer.Register<TSystem>(system);
             if (!mInited)
             {
-                mSystems.Add(instance);
+                mSystems.Add(system);
             }
             else
             {
-                instance.Init();
+                system.Init();
             }
         }
 
-        public void RegisterModel<T>(T model) where T : IModel
+        public void RegisterModel<TModel>(TModel model) where TModel : IModel
         {
             model.SetArchitecture(this);
-            mContainer.Register<T>(model);
+            mContainer.Register<TModel>(model);
             if(!mInited)
             {
                 mModels.Add(model);
@@ -108,34 +110,34 @@ namespace FrameworkDesign
             }
         }
 
-        public void RegisterUtility<T>(T utility) where T : IUtility
+        public void RegisterUtility<TUtility>(TUtility utility) where TUtility : IUtility
         {
-            mContainer.Register<T>(utility);
+            mContainer.Register<TUtility>(utility);
         }
 
-        public T GetSystem<T>() where T : class, ISystem
+        public TSystem GetSystem<TSystem>() where TSystem : class, ISystem
         {
-            return mContainer.Get<T>();
+            return mContainer.Get<TSystem>();
         }
 
-        public T GetModel<T>() where T : class, IModel
+        public TModel GetModel<TModel>() where TModel : class, IModel
         {
-            return mContainer.Get<T>();
+            return mContainer.Get<TModel>();
         }
 
-        public T GetUtility<T>() where T : class, IUtility
+        public TUtility GetUtility<TUtility>() where TUtility : class, IUtility
         {
-            return mContainer.Get<T>();
+            return mContainer.Get<TUtility>();
         }
 
-        public void SendCommand<T>() where T : ICommand, new()
+        public void SendCommand<TCommand>() where TCommand : ICommand, new()
         {
-            var command = new T();
+            var command = new TCommand();
             command.SetArchitecture(this);
             command.Execute();
         }
 
-        public void SendCommand<T>(T command) where T : ICommand
+        public void SendCommand<TCommand>(TCommand command) where TCommand : ICommand
         {
             command.SetArchitecture(this);
             command.Execute();
@@ -143,24 +145,24 @@ namespace FrameworkDesign
 
         private ITypeEventSystem mTypeEventSystem = new TypeEventSystem();
 
-        public void SendEvent<T>() where T : new()
+        public void SendEvent<TEvent>() where TEvent : new()
         {
-            mTypeEventSystem.Send<T>();
+            mTypeEventSystem.Send<TEvent>();
         }
 
-        public void SendEvent<T>(T e)
+        public void SendEvent<TEvent>(TEvent e)
         {
-            mTypeEventSystem.Send<T>(e);
+            mTypeEventSystem.Send<TEvent>(e);
         }
 
-        public IUnRegister RegisterEvent<T>(Action<T> onEvent)
+        public IUnRegister RegisterEvent<TEvent>(Action<TEvent> onEvent)
         {
-            return mTypeEventSystem.Register<T>(onEvent);
+            return mTypeEventSystem.Register<TEvent>(onEvent);
         }
 
-        public void UnRegisterEvent<T>(Action<T> onEvent)
+        public void UnRegisterEvent<TEvent>(Action<TEvent> onEvent)
         {
-            mTypeEventSystem?.UnRegister<T>(onEvent);
+            mTypeEventSystem?.UnRegister<TEvent>(onEvent);
         }
 
         public TResult SendQuery<TResult>(IQuery<TResult> query)
