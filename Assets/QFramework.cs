@@ -485,6 +485,8 @@ namespace QFramework
 
         private Dictionary<Type, IRegistrations> mEventRegistrotion = new Dictionary<Type, IRegistrations>();
 
+        public static readonly TypeEventSystem Global = new TypeEventSystem();
+
         public IUnRegister Register<T>(Action<T> onEvent)
         {
             var type = typeof(T);
@@ -531,6 +533,24 @@ namespace QFramework
             {
                 (registrations as Registrations<T>).OnEvent -= onEvent;
             }
+        }
+    }
+
+    public interface IOnEvent<T>
+    {
+        void OnEvent(T e);
+    }
+
+    public static class OnGlobalEventExtension
+    {
+        public static IUnRegister RegisterEvent<T>(this IOnEvent<T> self) where T : struct
+        {
+            return TypeEventSystem.Global.Register<T>(self.OnEvent);
+        }
+
+        public static void UnRegisterEvent<T>(this IOnEvent<T> self) where T : struct
+        {
+            TypeEventSystem.Global.UnRegister<T>(self.OnEvent);
         }
     }
     #endregion
